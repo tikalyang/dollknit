@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>織圖生成器basic - 台灣玩偶教學版 v4.7</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        body { font-family: -apple-system, "Microsoft JhengHei", sans-serif; background-color: #f8f9fa; color: #333; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 750px; width: 100%; }
+        h2 { color: #d63384; text-align: center; margin-bottom: 20px; }
+        
+        /* 影音教學區：增加縫合 */
+        .video-guide { background: #f0f7ff; border: 1px solid #b8daff; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
+        .video-item { background: white; padding: 10px; border-radius: 8px; text-align: center; border: 1px solid #dee2e6; font-size: 13px; }
+        .video-item b { display: block; color: #d63384; margin-bottom: 5px; font-size: 14px; }
+        .btn-video { background: #ff4444; color: white; text-decoration: none; padding: 5px 8px; border-radius: 5px; font-size: 11px; display: inline-block; margin-top: 5px; }
+        
+        /* 成品示範圖樣式 */
+        .sample-img-container { text-align: center; margin: 15px 0; }
+        .sample-img { max-width: 100%; border-radius: 10px; border: 3px solid #f8d7da; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
+        .code-tag-mr { background: #d63384; color: white; padding: 1px 6px; border-radius: 4px; font-weight: bold; font-family: monospace; }
+        
+        .ratio-intro { background: #fffaf0; border: 1px solid #ffeeba; padding: 20px; border-radius: 10px; margin-bottom: 30px; }
+        .ratio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 14px; margin-top: 10px; }
+        .ratio-item { background: white; padding: 8px; border-radius: 5px; border-left: 4px solid #ffc107; }
+
+        .config-section { background: #fff5f8; padding: 20px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #f8d7da; text-align: center; }
+        .btn-generate { background-color: #d63384; color: white; border: none; padding: 15px; border-radius: 8px; cursor: pointer; font-size: 18px; font-weight: bold; width: 80%; }
+        
+        .part-card { margin-top: 40px; border: 1px solid #eee; padding: 20px; border-radius: 12px; background: #fff; }
+        .part-header { border-bottom: 2px solid #d63384; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: baseline; }
+        .tech-note { background: #e8f4fd; padding: 12px; border-radius: 6px; font-size: 14px; margin-bottom: 15px; border-left: 4px solid #2196f3; line-height: 1.6; }
+        
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        th, td { border: 1px solid #f8d7da; padding: 10px; text-align: center; font-size: 14px; }
+        th { background-color: #fff0f3; color: #d63384; }
+        .done-row { background-color: #f2f2f2 !important; color: #aaa; text-decoration: line-through; }
+        
+        .edit-btns { display: flex; gap: 4px; justify-content: center; }
+        .btn-edit { border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 12px; }
+        .btn-add { background: #e3f2fd; color: #1976d2; }
+        .btn-del { background: #ffebee; color: #c62828; }
+
+        .assembly-guide { background: #f0fff4; border: 1px solid #c3e6cb; padding: 20px; border-radius: 10px; margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🧸 玩偶全比例織圖教學生成器</h2>
+
+    <div class="video-guide">
+        <h3 style="margin-top:0; color: #0056b3;">📹 基礎針法與代號說明</h3>
+        <p style="font-size: 14px;">在進入織圖前，請先確認您了解每個代號代表的動作：</p>
+        <div class="video-grid">
+            <div class="video-item">
+                <b>MR 環狀起針</b>
+                <span>零件起始處</span>
+                <a href="https://www.youtube.com/results?search_query=鉤針+環狀起針+台灣" target="_blank" class="btn-video">▶ 教學影片</a>
+            </div>
+            <div class="video-item">
+                <b>X 短針</b>
+                <span>基礎平織針</span>
+                <a href="https://www.youtube.com/results?search_query=鉤針+短針+教學" target="_blank" class="btn-video">▶ 教學影片</a>
+            </div>
+            <div class="video-item">
+                <b style="color:#28a745;">V 加針</b>
+                <span>1個針目鉤2針</span>
+                <a href="https://www.youtube.com/results?search_query=鉤針+加針+教學" target="_blank" class="btn-video">▶ 教學影片</a>
+            </div>
+            <div class="video-item">
+                <b style="color:#dc3545;">A 減針</b>
+                <span>2個針目縮為1針</span>
+                <a href="https://www.youtube.com/results?search_query=鉤針+減針+教學" target="_blank" class="btn-video">▶ 教學影片</a>
+            </div>
+            <div class="video-item">
+                <b>🧵 縫合技術</b>
+                <span>零件組裝方法</span>
+                <a href="https://www.youtube.com/results?search_query=鉤針+玩偶+縫合+教學+台灣" target="_blank" class="btn-video">▶ 教學影片</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="ratio-intro">
+        <h3 style="margin-top:0; color: #856404;">Step 1: 了解玩偶部位比例</h3>
+        <div class="sample-img-container">
+            <img src="https://i.imgur.com/uRRE39k.jpeg" alt="成品範例" class="sample-img">
+            <p style="font-size: 12px; color: #d63384; margin-top: 5px;">▲ 實作參考範例：經典三頭身 Q 版玩偶</p>
+        </div>
+        <div class="ratio-grid">
+            <div class="ratio-item"><b>頭部：</b>佔全高 1/3。</div>
+            <div class="ratio-item"><b>身體：</b>佔全高 1/3。</div>
+            <div class="ratio-item"><b>腿部：</b>佔全高 1/3。</div>
+            <div class="ratio-item"><b>手部：</b>長度約為身體的 3/4。</div>
+        </div>
+    </div>
+
+    <div class="config-section">
+        <div style="margin-bottom:15px;">
+            <label style="font-weight:bold;">輸入玩偶總高度 (cm): </label>
+            <input type="number" id="totalHeight" value="12" style="width:80px; text-align:center;">
+        </div>
+        <button class="btn-generate" onclick="generateDoll()">生成各部位 Step by Step 織圖</button>
+    </div>
+
+    <div id="tutorial-content"></div>
+
+    <div id="assembly-section" class="assembly-guide" style="display:none;">
+        <h3>Step 3: 組裝與縫合重點</h3>
+        <ul style="font-size: 14px; line-height: 1.8;">
+            <li><b>對齊縫合：</b>將頭部與身體的 12 針開口對齊縫合。</li>
+            <li><b>手部安裝：</b>固定在脖子下方第 1-2 圈處。</li>
+            <li><b>腿部安裝：</b>縫在身體底部中央偏前的位置。</li>
+            <li><b>髮網固定：</b>套在頭部調整好位置後再進行縫合。</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+// JS 邏輯保持 v4.6 版本
+function formatLogic(logic) {
+    return logic.replace(/MR/g, function(match) {
+        return `<span class="code-tag-mr">${match}</span>`;
+    });
+}
+
+let dollData = {
+    head: { name: "部位 A: 頭部 (Head)", dRatio: 0.33, lRatio: 0.33, mr: 6, stop: 12, qty: 1, note: "標準球體。停在 12 針以利縫合。" },
+    body: { name: "部位 B: 身體 (Body)", dRatio: 0.25, lRatio: 0.33, mr: 6, stop: 12, qty: 1, note: "上方保留 12 針，塞棉花後與頭部縫合。" },
+    arm:  { name: "部位 C: 手部 (Arms)", dRatio: 0.16, lRatio: 0.25, mr: 4, stop: 4,  qty: 2, note: "4 針起頭，不須減針，留長線頭縫合。" },
+    leg:  { name: "部位 D: 腿部 (Legs)", dRatio: 0.16, lRatio: 0.33, mr: 4, stop: 4,  qty: 2, note: "支撐高度的關鍵。坐姿娃娃頂部可不塞棉花。" },
+    hair: { name: "部位 E: 髮網 (Hair Cap)", dRatio: 0.35, lRatio: 0.20, mr: 6, stop: 0,  qty: 1, note: "髮型基底，直徑比頭部略大一點點。" }
+};
+
+function toggleRow(checkbox) { checkbox.closest('tr').classList.toggle('done-row', checkbox.checked); }
+function renumber(tbody) { Array.from(tbody.rows).forEach((row, i) => row.cells[1].innerText = i + 1); }
+function addRow(btn) {
+    const cur = btn.closest('tr'); 
+    const st = cur.cells[3].innerText; 
+    const nr = document.createElement('tr');
+    nr.innerHTML = `<td><input type="checkbox" onchange="toggleRow(this)"></td><td></td><td>${st}X <small>(手動加排)</small></td><td>${st}</td><td class="edit-btns"><button class="btn-edit btn-add" onclick="addRow(this)">➕</button><button class="btn-edit btn-del" onclick="this.closest('tr').remove(); renumber(cur.parentNode)">❌</button></td>`;
+    cur.parentNode.insertBefore(nr, cur.nextSibling); 
+    renumber(cur.parentNode);
+}
+
+function createTable(part, D, L) {
+    const base = part.mr; const targetRounds = Math.round(D); const maxSt = targetRounds * base;
+    let html = `<div class="part-card">
+        <div class="part-header"><h3>${part.name}</h3><span style="color:#d63384; font-weight:bold;">製作數量: ${part.qty}</span></div>
+        <div class="tech-note"><b>💡 教學重點：</b>${part.note}</div>
+        <table><thead><tr><th>完</th><th>圈</th><th>針法邏輯</th><th>總針</th><th>調整</th></tr></thead><tbody>`;
+    let rows = [];
+    const getRow = (l, s) => `<tr><td><input type="checkbox" onchange="toggleRow(this)"></td><td></td><td>${formatLogic(l)}</td><td>${s}</td><td class="edit-btns"><button class="btn-edit btn-add" onclick="addRow(this)">➕</button></td></tr>`;
+    
+    rows.push(getRow(`MR (${base}X)`, base));
+    for (let i = 2; i <= targetRounds; i++) rows.push(getRow(i===2?`${base}V`:`(${i-2}X, V)*${base}`, i*base));
+    let mid = Math.max(1, Math.round((L - D/2) * 2));
+    if (part.name.includes("Hair")) mid += 2;
+    for(let i=0; i<mid; i++) rows.push(getRow(maxSt+"X", maxSt));
+    if (part.stop > 0) {
+        for (let i = targetRounds; i >= 2; i--) {
+            let nextSt = (i - 1) * base;
+            if (nextSt < part.stop) break;
+            rows.push(getRow(i===2?`${base}A`:`(${i-2}X, A)*${base}`, nextSt));
+            if (nextSt === part.stop) break;
+        }
+    }
+    return html + rows.join('') + `</tbody></table></div>`;
+}
+
+function generateDoll() {
+    const H = parseFloat(document.getElementById('totalHeight').value) || 12;
+    const container = document.getElementById('tutorial-content');
+    container.innerHTML = createTable(dollData.head, H*0.33, H*0.33) + 
+                          createTable(dollData.body, H*0.25, H*0.33) + 
+                          createTable(dollData.arm,  H*0.16, H*0.25) + 
+                          createTable(dollData.leg,  H*0.16, H*0.33) + 
+                          createTable(dollData.hair, H*0.35, H*0.20);
+    document.querySelectorAll('tbody').forEach(tb => renumber(tb));
+    document.getElementById('assembly-section').style.display = 'block';
+}
+</script>
+</body>
+</html>
